@@ -5,7 +5,11 @@
 #include <stdint.h>
 
 struct skynet_message {
-	uint32_t source;
+	uint32_t source;// 消息发送方的服务地址
+
+	// 如果这是一个回应消息，那么要通过session找回对应的一次请求，在lua层，我们每次调用call的时候，都会往对  
+    // 方的消息队列中，push一个消息，并且生成一个session，然后将本地的协程挂起，挂起时，会以session为key，协程句  
+    // 柄为值，放入一个table中，当回应消息送达时，通过session找到对应的协程，并将其唤醒。后面章节会详细讨论
 	int session;
 	void * data;
 	size_t sz;

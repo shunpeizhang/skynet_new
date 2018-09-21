@@ -28,8 +28,8 @@ struct buffer_node {
 };
 
 struct socket_buffer {
-	int size;
-	int offset;
+	int size;//所有buffer_node中数据的总大小
+	int offset;//head对应的buffer_node中数据的读取位置
 	struct buffer_node *head;
 	struct buffer_node *tail;
 };

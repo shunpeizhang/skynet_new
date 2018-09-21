@@ -20,16 +20,16 @@
 
 struct message_queue {
 	struct spinlock lock;
-	uint32_t handle;
-	int cap;
-	int head;
-	int tail;
-	int release;
-	int in_global;
-	int overload;
+	uint32_t handle;// 拥有此消息队列的服务的id
+	int cap;// 消息大小
+	int head;// 头部index
+	int tail;// 尾部index
+	int release;// 是否能释放消息
+	int in_global;// 是否在全局消息队列中，0表示不是，1表示是
+	int overload;// 是否过载
 	int overload_threshold;
-	struct skynet_message *queue;
-	struct message_queue *next;
+	struct skynet_message *queue;// 消息队列
+	struct message_queue *next;// 下一个次级消息队列的指针
 };
 
 struct global_queue {

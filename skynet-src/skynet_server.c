@@ -41,21 +41,23 @@
 #endif
 
 struct skynet_context {
-	void * instance;
-	struct skynet_module * mod;
-	void * cb_ud;
-	skynet_cb cb;
-	struct message_queue *queue;
-	FILE * logfile;
+	void * instance;// 由指定module的create函数，创建的数据实例指针，同一类服务可能有多个实例，
+	                // 因此每个服务都应该有自己的数据
+	                
+	struct skynet_module * mod;// 引用服务module的指针，方便后面对create、init、signal和release函数进行调用
+	void * cb_ud;// 调用callback函数时，回传给callback的userdata，一般是instance指针
+	skynet_cb cb;// 服务的消息回调函数，一般在skynet_module的init函数里指定
+	struct message_queue *queue;// 服务专属的次级消息队列指针
+	FILE * logfile;// 日志句柄
 	uint64_t cpu_cost;	// in microsec
 	uint64_t cpu_start;	// in microsec
-	char result[32];
-	uint32_t handle;
-	int session_id;
-	int ref;
+	char result[32];// 操作skynet_context的返回值，会写到这里
+	uint32_t handle;// 标识唯一context的服务id
+	int session_id;// 在发出请求后，收到对方的返回消息时，通过session_id来匹配一个返回，对应哪个请求
+	int ref;// 引用计数变量，当为0时，表示内存可以被释放
 	int message_count;
-	bool init;
-	bool endless;
+	bool init;// 是否完成初始化
+	bool endless;// 消息是否堵住
 	bool profile;
 
 	CHECKCALLING_DECL
